@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="header(title)">
+   <div style="background-image: linear-gradient(to right, #fffbd5, #b20a2c);height: 50px">
+       <h1 th:text="${title}" style="text-align: center;"></h1>
+   </div>
+</div>
+</body>
+</html>

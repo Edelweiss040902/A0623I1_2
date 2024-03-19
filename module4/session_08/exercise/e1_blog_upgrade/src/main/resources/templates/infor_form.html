@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body{
+            background-image: radial-gradient(circle farthest-side, #fceabb, rgba(248, 0, 99, 0.63));
+        }
+        #form{
+            margin-left: 400px;
+            margin-top: 100px ;
+            background: transparent;
+            width: 40%;
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 0px 10px;
+
+        }
+        .input{
+            padding: 10px;
+            position: relative;
+            align-content: center;
+            justify-content: center;
+
+        }
+        .input>input,select,textarea{
+            display: inline-block;
+            margin-left: 100px;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+<div  th:replace="/layout::header(${message})" ></div>
+<div id="form">
+    <form th:action="@{/infors/save}" th:object="${infor}" method="post">
+        <input type="hidden" th:field="*{inforId}">
+
+        <div class="input">
+            <label>NAME</label>
+            <input type="text" th:field="*{inforName}" >
+            <p th:if="${#fields.hasErrors('inforName')}" th:errors="*{inforName}"></p>
+        </div>
+
+        <div class="input">
+            <label>DATE OF BIRTH</label>
+            <input type="date" th:field="*{inforDoB}" required>
+            <p th:if="${#fields.hasErrors('inforDoB')}" th:errors="*{inforDoB}"></p>
+        </div>
+
+        <div class="input">
+            <label>PHONE</label>
+            <input type="type" th:field="*{inforPhone}" >
+            <p th:if="${#fields.hasErrors('inforPhone')}" th:errors="*{inforPhone}"></p>
+        </div>
+
+        <div class="input">
+            <label>ADDRESS</label>
+            <textarea th:field="*{inforAddress}" ></textarea>
+        </div>
+        <div class="input">
+            <label>EMAIL</label>
+            <input type="text" th:field="*{inforEmail}" >
+            <p th:if="${#fields.hasErrors('inforEmail')}" th:errors="*{inforEmail}"></p>
+        </div>
+        <div class="input">
+            <label></label>
+            <input type="submit" value="SAVE">
+        </div>
+    </form>
+</div>
+</body>
+</html>

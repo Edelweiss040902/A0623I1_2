@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            color: #333;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        table th {
+            background-color: rgba(178, 10, 44, 0.71);
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #ccc;
+        }
+
+        table tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover td {
+            background-color: #ffedcc;
+        }
+
+        table td {
+            background-color: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            font-weight: bold;
+        }
+
+        #search {
+            display: flex;
+            justify-content: right;
+            align-items: flex-end;
+        }
+        a{
+            text-decoration:none;
+            color: #333333;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/layout::header(BLOGS)"></div>
+<div class="container">
+    <a th:href="@{/blogs/create}">ADD NEW BLOG</a>
+    <a th:href="@{/infors/create}">ADD NEW INFO</a>
+    <div class="dropdown">
+        <button style="background: rgba(128,13,13,0.63)" class="btn  dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Category
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li th:each="row :${infors}" style="display: flex">
+                <a  class="dropdown-item"  th:href="@{/blogs(show_txt=${row.getInforEmail()},name_choose ='list')}" th:text="${row.getInforName()}" ></a>
+                <button th:data-name="${row.inforName}" th:data-id="${row.inforId}" th:onclick="changeInfor(this.getAttribute('data-name'), this.getAttribute('data-id'))" type="button" style="color: red; background: transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-trash"
+                         viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                    </svg>
+                </button>
+                <a style="color: green;text-decoration: none " th:href="@{/infors/{id}/edit(id=${row.getInforId()})}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-tools"
+                         viewBox="0 0 16 16">
+                        <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/>
+                    </svg>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+    <div id="search">
+        <form th:action="@{/blogs}" method="get">
+            <input type="radio" name="name_choose" value="title" th:checked="${name_choose == 'title'}" required><label>TITLE</label>
+            <input type="radio" name="name_choose" value="infor" th:checked="${name_choose == 'infor'}"><label>INFOR</label>
+            <input type="text" name="search_txt" th:value="${search_txt}">
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th>STT</th>
+            <th>TITLE</th>
+            <th>DATE</th>
+            <th>INFOR</th>
+            <th colspan="3">OPTION</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="row: ${blogs.content}">
+            <td th:text="${rowStat.count}"></td>
+            <td th:text="${row.getBlogTitle()}"></td>
+            <td   th:text="${#temporals.format(row.getBlogDate(),'dd-MM-yyyy')}"> </td>
+            <td><a th:href="@{/infors/{id}/view(id=${row.getInfor().getInforId()})}"
+                   th:text="${row.getInfor().getInforName()}"></a></td>
+            <td>
+                <button th:data-name="${row.blogTitle}" th:data-id="${row.blogId}" th:onclick="changeInfor(this.getAttribute('data-name'), this.getAttribute('data-id'))" type="button" style="color: red; background: transparent" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-trash"
+                         viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                        <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                    </svg>
+                </button>
+            </td>
+            <td><a style="color: blue;text-decoration: none " th:href="@{/blogs/{id}/view(id=${row.getBlogId()})}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye"
+                     viewBox="0 0 16 16">
+                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                </svg>
+            </a></td>
+            <td>
+                <a style="color: green;text-decoration: none " th:href="@{/blogs/{id}/edit(id=${row.getBlogId()})}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-tools"
+                         viewBox="0 0 16 16">
+                        <path d="M1 0 0 1l2.2 3.081a1 1 0 0 0 .815.419h.07a1 1 0 0 1 .708.293l2.675 2.675-2.617 2.654A3.003 3.003 0 0 0 0 13a3 3 0 1 0 5.878-.851l2.654-2.617.968.968-.305.914a1 1 0 0 0 .242 1.023l3.27 3.27a.997.997 0 0 0 1.414 0l1.586-1.586a.997.997 0 0 0 0-1.414l-3.27-3.27a1 1 0 0 0-1.023-.242L10.5 9.5l-.96-.96 2.68-2.643A3.005 3.005 0 0 0 16 3q0-.405-.102-.777l-2.14 2.141L12 4l-.364-1.757L13.777.102a3 3 0 0 0-3.675 3.68L7.462 6.46 4.793 3.793a1 1 0 0 1-.293-.707v-.071a1 1 0 0 0-.419-.814zm9.646 10.646a.5.5 0 0 1 .708 0l2.914 2.915a.5.5 0 0 1-.707.707l-2.915-2.914a.5.5 0 0 1 0-.708M3 11l.471.242.529.026.287.445.445.287.026.529L5 13l-.242.471-.026.529-.445.287-.287.445-.529.026L3 15l-.471-.242L2 14.732l-.287-.445L1.268 14l-.026-.529L1 13l.242-.471.026-.529.445-.287.287-.445.529-.026z"/>
+                    </svg>
+                </a></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">DELETE</span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>DO YOU WANT TO DELETE  <span id="blogTitle"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" onclick="confirm_f()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <p style="color: rgba(0,242,255,0.63)" th:if="${message}" th:text="${message}"></p>
+    </div>
+    <div>
+        <a th:if="${blogs.hasPrevious()}" th:href="@{/blogs(page=${blogs.number - 1},search_txt=${search_txt},name_choose=${name_choose},show_txt=${show_txt})}">Previous</a>
+        <span th:each="pageNo:${#numbers.sequence(blogs.number , blogs.totalPages - 1)}">
+            <a th:href="@{/blogs(page=${pageNo},search_txt=${search_txt},name_choose=${name_choose},show_txt=${show_txt})}" th:text="${pageNo}"></a>
+        </span>
+        <a th:if="${blogs.hasNext()}" th:href="@{/blogs(page=${blogs.number + 1},search_txt=${search_txt},name_choose=${name_choose},show_txt=${show_txt})}">Next</a>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+<script  th:inline="javascript">
+    var blogId = "";
+    function changeInfor(name, id) {
+        document.getElementById("blogTitle").innerText = name;
+        blogId = id;
+        console.log(id)
+    }
+
+    function confirm_f()
+    {
+
+        window.location.href="/infors/"+blogId+"/delete"
+    }
+
+</script>
+</body>
+</html>

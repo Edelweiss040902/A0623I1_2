@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body class="container">
+<table>
+    <tr>
+        <td>NAME :</td>
+        <td th:text="${infor.getInforName()}"></td>
+    </tr>
+    <tr>
+        <td>DAY OF BIRTH :</td>
+        <td th:text="${infor.inforDoB}"></td>
+    </tr>
+    <tr>
+        <td>PHONE :</td>
+        <td th:text="${infor.getInforPhone()}"></td>
+    </tr>
+    <tr>
+        <td>ADDRESS :</td>
+        <td th:text="${infor.getInforAddress()}"></td>
+    </tr>
+    <tr>
+        <td>EMAIL :</td>
+        <td th:text="${infor.getInforEmail()}"></td>
+    </tr>
+</table>
+</body>
+</html>
